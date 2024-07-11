@@ -5,6 +5,8 @@ services:
     image: nginx
     networks:
       - netv3
+    ports:
+      - "81:80"
     deploy:
       mode: global
       placement:
