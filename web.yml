@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  agent:
+    image: nginx
+    networks:
+      - netv3
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.platform.os == linux]
+
+networks:
+  netv3:
+    external: true
