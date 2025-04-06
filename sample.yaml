@@ -6,4 +6,7 @@
   tasks:
     - name: Print extracted variable from environment
       debug:
-        msg: "Neptune Tag: {{ lookup('env', 'neptune-tag') }}"
+        msg: "Neptune Tag: {{ lookup('env', 'neptune_tag') }}"
+    - name: checking next
+      debug:
+        msg: ""Neptune Tag: {{ lookup('env', 'ref') }}""
