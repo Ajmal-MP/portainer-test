@@ -1,9 +1,9 @@
----
-- name: Access Semaphore Extracted Environment Variables
+- name: webhook test
   hosts: all
-  gather_facts: false
-
   tasks:
-    - name: Show env
+    - name: debug
       debug:
-        var: env_vars.stdout_lines
+        msg: "neptune_tag: {{ neptune_tag }}"
+    - name: debug2
+      debug:
+        msg: "ref: {{ ref }}"
