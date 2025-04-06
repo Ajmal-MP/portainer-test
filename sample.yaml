@@ -6,6 +6,7 @@
     compose_file: "/home/ubuntu/neptune-v3-release/docker-compose.linux.yml"
     neptune_release_dir: "/home/ubuntu/sand-release/neptune-release/"
     values_file: "{{ neptune_release_dir }}tis/values.yaml"
+    release_branch: "sand-k8s"
     image: "neptune-api"
     registry: "103.110.127.42:5000"
     registry_image: "{{ registry }}/{{image}}:{{ neptune_api_tag }}"
@@ -79,7 +80,7 @@
         msg:  "{{ git_commit_out.stdout_lines }}"
 
     - name: git push
-      command: "git commit -m 'Neptune Api version {{ neptune_api_tag }}'"
+      command: "git push origin {{ release_branch }}"
       args:
         chdir: "{{ neptune_release_dir }}"
       register: git_push_out
