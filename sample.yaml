@@ -9,4 +9,4 @@
         msg: "Neptune Tag: {{ lookup('env', 'neptune_tag') }}"
     - name: checking next
       debug:
-        msg: ""Neptune Tag: {{ lookup('env', 'ref') }}""
+        msg: "Neptune Tag: {{ lookup('env', 'ref') }}"
