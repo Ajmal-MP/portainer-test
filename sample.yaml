@@ -1,7 +1,7 @@
 ---
 - name: Print all variables
   gather_facts: yes
-
+  hosts: all
   tasks:
     - name: Print all variables
       debug:
