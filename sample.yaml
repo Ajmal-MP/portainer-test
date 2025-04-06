@@ -4,7 +4,8 @@
   
   vars:
     compose_file: "/home/ubuntu/neptune-v3-release/docker-compose.linux.yml"
-    values_file: "/home/ubuntu/sand-release/neptune-release/tis/values.yaml"
+    neptune_release_dir: "/home/ubuntu/sand-release/neptune-release/"
+    values_file: "{{ neptune_release_dir }}tis/values.yaml"
     image: "neptune-api"
     registry: "103.110.127.42:5000"
     registry_image: "{{ registry }}/{{image}}:{{ neptune_api_tag }}"
@@ -61,3 +62,28 @@
       register: sed_output
       changed_when: sed_output.rc == 0 and "1 changed" in sed_output.stdout
       failed_when: sed_output.rc != 0
+
+    - name: git add file
+      command: "git add tis/values.yaml"
+      args:
+        chdir: "{{ neptune_release_dir }}"
+      
+    - name: git commit file
+      command: "git commit -m 'Neptune Api version {{ neptune_api_tag }}'"
+      args:
+        chdir: "{{ neptune_release_dir }}"
+      register: git_commit_out
+    
+    - name: git commit debug
+      debug:
+        msg:  "{{ git_commit_out.stdout_lines }}"
+
+    - name: git push
+      command: "git commit -m 'Neptune Api version {{ neptune_api_tag }}'"
+      args:
+        chdir: "{{ neptune_release_dir }}"
+      register: git_push_out
+
+    - name: git push debug
+      debug:
+        msg:  "{{ git_push_out.stdout_lines }}"
