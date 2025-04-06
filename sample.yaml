@@ -1,8 +1,9 @@
 ---
-- name: Print all variables
-  gather_facts: yes
-  hosts: all
+- name: Access Semaphore Extracted Environment Variables
+  hosts: build1
+  gather_facts: false
+
   tasks:
-    - name: Print all variables
+    - name: Print extracted variable from environment
       debug:
-        var: hostvars[inventory_hostname]
+        msg: "Neptune Tag: {{ lookup('env', 'neptune-tag') }}"
