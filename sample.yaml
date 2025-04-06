@@ -1,28 +1,23 @@
-- name: neptune-api build
-  hosts: build1
-
+---
+- name: Build Docker image using docker-compose
+  hosts: build1  # Replace with your target host/group from inventory
+  
   vars:
-    storage_threshold: 90
-    docker_compose_file: "/home/ubuntu/neptune-v3-release/docker-compose.linux.yml"
+    # Define your project variables
+    project_dir: "/home/ubuntu/neptune-v3-release"  # Directory containing docker-compose.yml
+    compose_file: "{{ project_dir }}/docker-compose.linux.yml"
+    service_name: "neptune-api"  # Main service name from your docker-compose.yml
 
   tasks:
-    - name: Check disk usage
-      shell: df -h / | awk 'NR==2 {print $5}' | cut -d'%' -f1
-      register: disk_usage
-      changed_when: false
 
-    - name: Show disk usage
+    - name: Build Docker image using docker-compose
+      command: 
+        cmd: "docker-compose -f {{ compose_file }} build {{ service_name }}"
+        chdir: "{{ project_dir }}"
+      register: build_result
+      changed_when: build_result.rc == 0
+
+    - name: Debug build output
       debug:
-        msg: "Current disk usage is {{ disk_usage.stdout }}%"
-
-    - name: Start Neptune-Api build if disk usage is acceptable
-      block:
-        - name: Building docker image
-          shell: docker compose -f {{ docker_compose_file }} build neptune-api
-          when: disk_usage.stdout | int < storage_threshold
-
-      rescue:
-        - name: Disk usage too high, failing the task
-          fail:
-            msg: "Disk usage ({{ disk_usage.stdout }}%) is above {{ storage_threshold }}%, build aborted."
-          when: disk_usage.stdout | int >= storage_threshold
+        msg: "{{ build_result.stdout_lines }}"
+      when: build_result.stdout is defined
