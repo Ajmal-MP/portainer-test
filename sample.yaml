@@ -1,9 +1,7 @@
 - name: webhook test
-  hosts: all
+  hosts: build1
   tasks:
     - name: debug
       debug:
         msg: "neptune_tag: {{ neptune_tag }}"
-    - name: debug2
-      debug:
-        msg: "ref: {{ ref }}"
+
