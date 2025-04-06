@@ -34,3 +34,22 @@
       debug:
         msg: "{{ build_result.stdout_lines }}"
       when: build_result.stdout is defined
+
+    - name: tag image 
+      command: 
+        cmd: "docker tag neptune-api 103.110.127.42:5000/neptune-api:{{ neptune_api_tag }}"
+      register: tag_image_result
+
+    - name: Debug tag image output
+      debug:
+        msg: "{{ tag_image_result.stdout_lines }}"
+
+
+    - name: push image 
+      command: 
+        cmd: "docker push  103.110.127.42:5000/neptune-api:{{ neptune_api_tag }}"
+      register: push_image_result
+
+    - name: Debug push image output
+      debug:
+        msg: "{{ push_image_result.stdout_lines }}"
