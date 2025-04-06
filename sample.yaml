@@ -4,16 +4,6 @@
   gather_facts: false
 
   tasks:
-    - name : debug neptune_tag
-      ansible.builtin.debug:
-        msg: "{{ neptune_tag }}"
-    - name : debug ref
-      ansible.builtin.debug:
-        msg: "{{ ref }}"
-        
-    - name: Print extracted variable from environment
+    - name: Show env
       debug:
-        msg: "Neptune Tag: {{ lookup('env', 'neptune_tag') }}"
-    - name: checking next
-      debug:
-        msg: "Neptune Tag: {{ lookup('env', 'ref') }}"
+        var: env_vars.stdout_lines
