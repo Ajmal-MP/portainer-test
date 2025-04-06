@@ -1,6 +1,8 @@
 ---
-- name: Basic Hello World Playbook
-  hosts: all
+- name: Print all variables
+  gather_facts: yes
+
   tasks:
-    - name: Echo Hello World
-      ansible.builtin.shell: echo "Hello, World"
+    - name: Print all variables
+      debug:
+        var: hostvars[inventory_hostname]
