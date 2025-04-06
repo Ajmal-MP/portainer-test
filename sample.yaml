@@ -4,7 +4,10 @@
   
   vars:
     compose_file: "/home/ubuntu/neptune-v3-release/docker-compose.linux.yml"
-    service_name: "neptune-api"
+    values_file: "/home/ubuntu/sand-release/neptune-release/tis/values.yaml"
+    image: "neptune-api"
+    registry: "103.110.127.42:5000"
+    registry_image: "{{ registry }}/{{image}}:{{ neptune_api_tag }}"
     disk_limit: 90
   tasks:
 
@@ -26,7 +29,7 @@
 
     - name: Build Docker image using docker-compose
       command: 
-        cmd: "docker compose -f {{ compose_file }} build {{ service_name }}"
+        cmd: "docker compose -f {{ compose_file }} build {{ image }}"
       register: build_result
       changed_when: build_result.rc == 0
 
@@ -37,19 +40,24 @@
 
     - name: tag image 
       command: 
-        cmd: "docker tag neptune-api 103.110.127.42:5000/neptune-api:{{ neptune_api_tag }}"
-      register: tag_image_result
-
-    - name: Debug tag image output
-      debug:
-        msg: "{{ tag_image_result.stdout_lines }}"
+        cmd: "docker tag {{ image }} {{ registry_image }}"
 
 
     - name: push image 
       command: 
-        cmd: "docker push  103.110.127.42:5000/neptune-api:{{ neptune_api_tag }}"
+        cmd: "docker push  {{ registry_image }}"
       register: push_image_result
 
     - name: Debug push image output
       debug:
         msg: "{{ push_image_result.stdout_lines }}"
+
+
+    - name: Update neptuneApi image tag in values.yaml
+      command:
+        cmd: >-
+          sed -i '/^\s*neptuneApi:\s*$/{n;/^\s*image:\s*/s#image:.*#image: {{ registry_image }}#}'
+          "{{ values_file }}"
+      register: sed_output
+      changed_when: sed_output.rc == 0 and "1 changed" in sed_output.stdout
+      failed_when: sed_output.rc != 0
