@@ -19,9 +19,9 @@
         msg: "Current disk usage is {{ disk_usage.stdout }}%"
 
     - name: Check disk usage threshold
-      fail:
-        msg: "Disk usage is {{ disk_usage.stdout }}%, which is above the {{ disk_limit }}% threshold. Build will not proceed."
-      when: disk_usage.stdout|int > {{ disk_limit }}
+          fail:
+            msg: "Disk usage is {{ disk_usage.stdout }}%, which is above the {{ disk_limit }}% threshold. Build will not proceed."
+          when: disk_usage.stdout|int > disk_limit
 
 
     - name: Build Docker image using docker-compose
