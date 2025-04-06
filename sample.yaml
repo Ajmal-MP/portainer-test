@@ -5,7 +5,7 @@
 #       debug:
 #         msg: "neptune_tag: {{ neptune_tag }}"
 
-- name: Check storage usage and manage neptune-api build
+- name: neptune-api build
   hosts: build1
 
   vars:
@@ -29,10 +29,10 @@
           shell: |
             cd {{ target_dir }}
             docker compose -f {{ docker_compose_file }} build neptune-api
-          when: disk_usage.stdout | int > storage_threshold
+          when: disk_usage.stdout | int < storage_threshold
 
       rescue:
-        - name: Fail due to no disk space
+        - name: Fail due to insufficient disk space
           fail:
-            msg: "Disk usage ({{ disk_usage.stdout }}%) is below {{ storage_threshold }}%, job failed as per requirements"
-          when: disk_usage.stdout | int <= storage_threshold
+            msg: "Disk usage ({{ disk_usage.stdout }}%) is above {{ storage_threshold }}%, job failed due to insufficient space"
+          when: disk_usage.stdout | int >= storage_threshold
