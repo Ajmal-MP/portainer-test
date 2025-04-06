@@ -10,8 +10,7 @@
 
   vars:
     storage_threshold: 90  # Percentage threshold
-    target_dir: "/home/ubuntu/neptune-v3-release"
-    docker_compose_file: "docker-compose.linux.yml"
+    docker_compose_file: "/home/ubuntu/neptune-v3-release/docker-compose.linux.yml"
 
   tasks:
     - name: disk usage
@@ -25,9 +24,8 @@
 
     - name: Start Neptune-Api Build
       block:
-        - name: Navigate to neptune directory and build docker compose
+        - name: Started building
           shell: |
-            cd {{ target_dir }}
             docker compose -f {{ docker_compose_file }} build neptune-api
           when: disk_usage.stdout | int < storage_threshold
 
