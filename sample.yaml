@@ -12,7 +12,7 @@
 
     - name: Build Docker image using docker-compose
       command: 
-        cmd: "docker-compose -f {{ compose_file }} build {{ service_name }}"
+        cmd: "docker compose -f {{ compose_file }} build {{ service_name }}"
         chdir: "{{ project_dir }}"
       register: build_result
       changed_when: build_result.rc == 0
