@@ -5,7 +5,7 @@
   vars:
     compose_file: "/home/ubuntu/neptune-v3-release/docker-compose.linux.yml"
     service_name: "neptune-api"
-
+    disk_limit: 70
   tasks:
 
 
@@ -21,7 +21,7 @@
     - name: Check disk usage threshold
       fail:
         msg: "Disk usage is {{ disk_usage.stdout }}%, which is above the 90% threshold. Build will not proceed."
-      when: disk_usage.stdout|int > 90
+      when: disk_usage.stdout|int > {{ disk_limit }}
 
 
     - name: Build Docker image using docker-compose
