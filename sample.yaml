@@ -1,8 +1,8 @@
----
 - name: Build
   hosts: build1
   tasks:
 
-    - name: tag image 
-      command: 
-        cmd: "echo '{{ tag }}'"
+    - name: echo tag
+      command: echo "{{ tag }}"
+    - name: echo repo
+      command: echo "{{ repo }}"
