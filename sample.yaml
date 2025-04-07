@@ -3,6 +3,8 @@
   tasks:
 
     - name: echo tag
-      command: echo "{{ tag }}"
+      debug:
+        msg: "{{ tag }}"
     - name: echo repo
-      command: echo "{{ repo }}"
+      debug:
+        msg: "{{ repo }}"
